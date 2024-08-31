@@ -1,6 +1,7 @@
 package com.example.buttonanimations
 
 import android.os.Bundle
+import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +39,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import nl.dionsegijn.konfetti.compose.KonfettiView
@@ -84,6 +86,9 @@ fun ButtonAnimationScreen() {
 
         // Sixth button with particle burst effect
         AnimatedButtonWithKonfetti(index = 6)
+
+        // Seventh button with bounce effect
+        AnimatedButtonWithBounce(index = 7)
     }
 }
 
@@ -393,6 +398,70 @@ fun AnimatedButtonWithKonfetti(index: Int) {
             }
         }
     }
+}
+
+@Composable
+fun AnimatedButtonWithBounce(index: Int) {
+    var isBouncing by remember { mutableStateOf(false) }
+
+    // Animate scale with spring physics for bounce effect
+    val scale by animateFloatAsState(
+        targetValue = if (isBouncing) 1.2f else 1f,
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = { OvershootInterpolator(2f).getInterpolation(it) } // Overshoot for bounce
+        )
+    )
+
+    // Reset bounce state after animation completes
+    LaunchedEffect(isBouncing) {
+        if (isBouncing) {
+            delay(300)
+            isBouncing = false
+        }
+    }
+
+    // Use a Box to align and make the button visible
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // Dot indicator
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .background(Color.Gray, shape = CircleShape)
+        )
+
+        // Button with Bounce Effect
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp)
+                .scale(scale) // Apply bounce scale animation
+                .background(Color(0xFF4CAF50), shape = MaterialTheme.shapes.medium)
+                .clickable {
+                    isBouncing = true // Trigger bounce
+                }
+                .padding(vertical = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Button $index",
+                color = Color.White
+            )
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewButtonAnimationScreen() {
+    ButtonAnimationScreen()
 }
 
 
