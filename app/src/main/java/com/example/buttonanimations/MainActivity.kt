@@ -21,22 +21,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import nl.dionsegijn.konfetti.compose.KonfettiView
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 
 class MainActivity : ComponentActivity() {
@@ -72,6 +81,9 @@ fun ButtonAnimationScreen() {
 
         // Fifth button with circular reveal effect
         AnimatedButtonWithCircularReveal(index = 5)
+
+        // Sixth button with particle burst effect
+        AnimatedButtonWithKonfetti(index = 6)
     }
 }
 
@@ -312,5 +324,77 @@ fun AnimatedButtonWithCircularReveal(index: Int) {
         }
     }
 }
+
+@Composable
+fun AnimatedButtonWithKonfetti(index: Int) {
+    var showConfetti by remember { mutableStateOf(false) }
+
+    // Party configuration for Konfetti
+    val party = remember {
+        Party(
+            speed = 0f,
+            maxSpeed = 30f,
+            damping = 0.9f,
+            spread = 360,
+            colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+            emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(100),
+            position = Position.Relative(0.5, 0.1)
+        )
+    }
+
+    // Reset confetti state after a delay to allow re-triggering
+    LaunchedEffect(showConfetti) {
+        if (showConfetti) {
+            delay(500) // Duration of the confetti effect
+            showConfetti = false // Reset the confetti state after the effect is done
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // KonfettiView composable to show confetti across the entire screen
+        if (showConfetti) {
+            KonfettiView(
+                modifier = Modifier.fillMaxSize(),
+                parties = listOf(party)
+            )
+        }
+
+        // Button with Konfetti Effect
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Dot indicator
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .background(Color.Gray, shape = CircleShape)
+            )
+
+            // Button to trigger confetti
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 16.dp)
+                    .background(Color.Red, shape = MaterialTheme.shapes.medium)
+                    .clickable {
+                        showConfetti = true // Trigger confetti animation on click
+                    }
+                    .padding(vertical = 12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Button $index",
+                    color = Color.White
+                )
+            }
+        }
+    }
+}
+
+
 
 
