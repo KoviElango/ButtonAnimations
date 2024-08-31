@@ -1,5 +1,7 @@
 package com.example.buttonanimations
 
+import android.graphics.Path
+import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,14 +37,44 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.buttonanimations.ui.theme.ButtonAnimationsTheme
 import kotlinx.coroutines.delay
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.unit.dp
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.dp
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +92,7 @@ fun ButtonAnimationScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 32.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp) // Space between buttons
     ) {
         // First button with ripple effect and delay
@@ -73,6 +106,9 @@ fun ButtonAnimationScreen() {
 
         // Fourth button with gradient background
         AnimatedButtonWithGradient(index = 4)
+
+        // Fifth button with circular reveal effect
+        AnimatedButtonWithCircularReveal(index = 5)
     }
 }
 
@@ -262,3 +298,56 @@ fun AnimatedButtonWithGradient(index: Int) {
         }
     }
 }
+
+@Composable
+fun AnimatedButtonWithCircularReveal(index: Int) {
+    var isRevealed by remember { mutableStateOf(false) }
+
+    // Animate the radius of the circle from 0 to a maximum value
+    val radius by animateFloatAsState(
+        targetValue = if (isRevealed) 10000f else 0f, // Adjust 1000f to your desired max radius
+        animationSpec = tween(durationMillis = 600)
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // Dot indicator
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .background(Color.Gray, shape = CircleShape)
+        )
+
+        // Button with Circular Reveal Effect
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp)
+                .background(Color.Green)
+                .clickable {
+                    isRevealed = !isRevealed // Toggle the circular reveal state
+                }
+                .padding(vertical = 12.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Canvas(modifier = Modifier.fillMaxWidth()) {
+                drawCircle(
+                    color = Color.Black,
+                    radius = radius,
+                    center = center
+                )
+            }
+            Text(
+                text = "Button $index",
+                color = Color.White // Adjust text color for visibility
+            )
+        }
+    }
+}
+
+
