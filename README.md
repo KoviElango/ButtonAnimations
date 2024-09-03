@@ -11,3 +11,19 @@ A simple Android application showcasing various button animations using Jetpack 
 - **Circular Reveal Effect**: A button with a circular reveal animation.
 - **Konfetti Burst Effect**: A button that triggers a konfetti burst animation.
 - **Bounce Effect**: A button with a bounce animation.
+
+Kotlin: The primary language for Android development.
+Jetpack Compose: A modern toolkit for building native Android UI.
+Other libs:
+- Konfetti: A lightweight library for confetti animations
+
+🤝 Contributing
+Contributions are welcome! Please follow these steps:
+
+Fork the repository.
+Create a new branch (git checkout -b feature/your-feature).
+Commit your changes (git commit -m 'Add some feature').
+Push to the branch (git push origin feature/your-feature).
+Open a pull request.
+
+Feel free to make any changes or ask for further customization!
