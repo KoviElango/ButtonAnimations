@@ -76,4 +76,5 @@ dependencies {
     implementation (libs.ui.tooling.preview)
     debugImplementation (libs.ui.tooling)
     implementation (libs.konfetti.compose)
+    implementation (libs.androidx.material3.v120)
 }
