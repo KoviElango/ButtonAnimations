@@ -34,7 +34,8 @@ fun ButtonAnimationScreen_1(navController: NavHostController) {
     {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .weight(0.75f)
             .padding(start = 16.dp, end = 16.dp, top = 40.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -61,58 +62,75 @@ fun ButtonAnimationScreen_1(navController: NavHostController) {
 
 @Composable
 fun ButtonAnimationScreen_2(navController: NavHostController) {
-    Column(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp, top = 40.dp)
+    ) {
+        // Main content with buttons
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp, top = 40.dp)
-            ) {
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp, top = 40.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(bottom = 70.dp) // Reserve space for the bottom row of buttons
         ) {
-            item {
-                AnimatedButtonWithGradient(index = 4)
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f) // Allows LazyColumn to take the available space
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item {
+                    AnimatedButtonWithGradient(index = 4)
+                }
+                item {
+                    AnimatedButtonWithCircularReveal(index = 5)
+                }
+                item {
+                    AnimatedButtonWithKonfetti(index = 6) // Confetti animation item
+                }
             }
-            item {
-                AnimatedButtonWithCircularReveal(index = 5)
-            }
-            item {
-                AnimatedButtonWithKonfetti(index = 6)
-            }
-            item {
 
-            }
-        }
-        Row(){
-            Button(onClick = { navController.navigate("page_3") }) {
-                Text(text = "Go to page_3")
-            }
-            Button(onClick = { navController.navigate("page_3") }) {
-                Text(text = "Go to page_3")
+            // Bottom row of buttons
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Button(onClick = { navController.navigate("page_3") }) {
+                    Text(text = "Go to page_3")
+                }
+                Button(onClick = { navController.navigate("page_3") }) {
+                    Text(text = "Go to page_3")
+                }
             }
         }
     }
 }
 
 
+
 @Composable
 fun ButtonAnimationScreen_3(navController: NavHostController) {
-    LazyColumn(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 16.dp, end = 16.dp, top = 40.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 40.dp)
     ) {
-        item {
-            AnimatedButtonWithBounce(index = 7)
-        }
-        item {
-            Button(onClick = { navController.navigate("page_2") }) {
-                Text(text = "Go to page_2")
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.75f)
+                .padding(start = 16.dp, end = 16.dp, top = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                AnimatedButtonWithBounce(index = 7)
             }
+            }
+        Button(onClick = { navController.navigate("page_2") }) {
+            Text(text = "Go to page_2")
         }
     }
 }
