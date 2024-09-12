@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.buttonanimations.ui_screens.ButtonAnimationScreen
+import com.example.buttonanimations.ui_screens.AppNavigation
 
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            ButtonAnimationScreen()
+            AppNavigation()
             }
         }
     }
