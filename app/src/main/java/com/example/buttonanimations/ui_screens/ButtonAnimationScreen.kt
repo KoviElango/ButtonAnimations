@@ -86,11 +86,9 @@ fun ButtonAnimationScreen_2(navController: NavHostController) {
                 item {
                     AnimatedButtonWithCircularReveal(index = 5)
                 }
-                item {
-                    AnimatedButtonWithKonfetti(index = 6) // Confetti animation item
-                }
-            }
 
+            }
+            AnimatedButtonWithKonfetti(index = 6)
             // Bottom row of buttons
             Row(
                 modifier = Modifier
